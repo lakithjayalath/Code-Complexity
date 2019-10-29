@@ -59,7 +59,7 @@ public class ConditionalComplexity {
 //				clc = lc.conditionalLogicalComplex(j+1, code);
 //			}
 //		}
-		System.out.println("if = " + conditionalCount);
+		//System.out.println("if = " + conditionalCount);
 //		Ctc = Ctc + clc;
 		return Ctc;
 	}

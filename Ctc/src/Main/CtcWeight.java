@@ -24,12 +24,10 @@ public class CtcWeight {
 	public static void main(String args[]) throws IOException {
 		
 		int totalWeight = 0;
-		int conditionalWeight = 0;
-		int iterativeWeight = 0;
-		int catchWeight = 0;
-		int switchWeight = 0;
 		int switchComp = 0;
-		
+		int switchPresent = 0;
+		int lineTotalCtc = 0;
+		int lineNo = 0;
 		/*
 		 * String filePath = "C:/Users/L/Desktop/SPM new/SPM project/sample.txt";
 		 * CodeGenerator codeGenerator = new CodeGenerator(); String code=
@@ -61,63 +59,79 @@ public class CtcWeight {
 		FileInputStream fstream = new FileInputStream("C:/Users/L/Desktop/SPM new/SPM project/sample.txt");
 		BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 
+		
 		String code;
-		int switchPresent = 0;
+		int noOfLines=0;
 
-		//Read File Line By Line
 		while ((code = br.readLine()) != null)   {
+			noOfLines++;
+		}
+
+		code =null;
+		FileInputStream fstream2 = new FileInputStream("C:/Users/L/Desktop/SPM new/SPM project/sample.txt");
+		BufferedReader br2 = new BufferedReader(new InputStreamReader(fstream2));
+		int conditionalWeight[] = new int[noOfLines];
+		int iterativeWeight[] = new int[noOfLines];
+		int catchWeight[] = new int[noOfLines];
+		int switchWeight[] = new int[noOfLines];
+		//Read File Line By Line
+		while ((code = br2.readLine()) != null)   {
 			 //Check comments lines
 	    	  boolean isPresentSingleComment = code.indexOf("//") != -1 ? true : false;
 	    	  boolean isPresentMultipleCommentStart = code.indexOf("/*") != -1 ? true : false;
 	    	  boolean isPresentMultipleCommentMiddle = code.indexOf("*") != -1 ? true : false;
 	    	  boolean isPresentMultipleCommentEnd = code.indexOf("*/") != -1 ? true : false;
-	    	  boolean isPresentMultipleSystem = code.indexOf("System") != -1 ? true : false;
-	    	  
+	    	  boolean isPresentMultipleSystem = code.indexOf("System.out") != -1 ? true : false;
 	    	  ConditionalComplexity conditional = new ConditionalComplexity();
 	    	  IterativeComplexity iterative =new IterativeComplexity();
 	    	  CatchComplexity c = new CatchComplexity();
 	    	  SwitchComplexity sw = new SwitchComplexity();
 	    	//Ignore the comments
 	    	  if(isPresentSingleComment || isPresentMultipleCommentStart || isPresentMultipleCommentEnd || isPresentMultipleCommentMiddle || isPresentMultipleSystem) {
-	    		  
+		    		iterativeWeight[lineNo] =0;
+					conditionalWeight[lineNo] = 0;  
+					catchWeight[lineNo]= 0;
+					switchWeight[lineNo] = 0;
+
 	    	  }
 	    	  else {
-	    		iterativeWeight = iterativeWeight + iterative.iterativeComplex(code);
-				conditionalWeight = conditionalWeight + conditional.conditonalComplex(code);  
-				catchWeight= catchWeight + c.catchComplex(code);
-				switchPresent = switchPresent + sw.switchComplex(code);
+	    		iterativeWeight[lineNo] =iterative.iterativeComplex(code);
+				conditionalWeight[lineNo] = conditional.conditonalComplex(code);  
+				catchWeight[lineNo]= c.catchComplex(code);
+				switchPresent =  switchPresent+sw.switchComplex(code);
 				
 				if(switchPresent == 1) {
 					CaseComplexity cc = new CaseComplexity();
 					switchComp = cc.caseComplex(code, switchPresent);
 				}
 				
-				switchWeight = switchWeight + switchComp;
+				switchWeight[lineNo] = switchComp;
 	    	  }
 	    	  
+	    	  lineTotalCtc =switchWeight[lineNo]+catchWeight[lineNo]+iterativeWeight[lineNo]+conditionalWeight[lineNo];
 		  
 	    	// Print the content on the console
 	  			System.out.println (code);
+	  			System.out.println("Ctc "+lineTotalCtc);
+
+				totalWeight = totalWeight + lineTotalCtc;
+	  			lineTotalCtc = 0;
+	  			lineNo++;
+	  			
 			
 //			IterativeComplexity ic = new IterativeComplexity();
 //			iterativeWeight = ic.iterativeComplex(code);
 //			System.out.println("Iterative Weight : " + iterativeWeight);
 //			
-//			totalWeight = conditionalWeight + iterativeWeight;
 			
 			
 //			CtcComplex x = new CtcComplex();
 //			System.out.println("Total Weight = " + x.totalWeight());
 
 		}
-		
-		System.out.println("Iterative Weight : " + iterativeWeight);
-		System.out.println("Conditional Weight : " + conditionalWeight);
-		System.out.println("Catch Weight : " + catchWeight);
-		System.out.println("Switch Weight : " + switchPresent);
-		totalWeight = totalWeight + conditionalWeight + iterativeWeight + catchWeight + switchWeight;
-		System.out.println("Total weight : " + totalWeight);
+		System.out.println("\n\nTotal weight : " + totalWeight);
 
+		
 		//Close the input stream
 		fstream.close();
 

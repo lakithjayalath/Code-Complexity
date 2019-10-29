@@ -45,7 +45,7 @@ public class IterativeComplexity {
 //				llc = lc.loopLogicalComplex(j, code);
 //			}
 
-		System.out.println("Loop Count = " + loopCount);
+		//System.out.println("Loop Count = " + loopCount);
 //		System.out.println("llc : " + llc);
 //		System.out.println("llc " + llc + " " + Ctc);
 //		Ctc = Ctc + llc;
